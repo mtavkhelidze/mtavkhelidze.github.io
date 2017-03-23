@@ -1,0 +1,50 @@
+$brand-danger: #FF4200;
+
+$fa-font-path: "~font-awesome/fonts";
+@import "~font-awesome/scss/font-awesome";
+@import "~bootstrap/scss/bootstrap";
+@import "~compass-mixins";
+
+$bookz-width: 800px;
+$bookz-gap: $spacer * 2;
+
+div#app {
+  padding: $bookz-gap;
+  max-width: $bookz-width;
+  .bookz-logo {
+    text-align: center;
+  }
+
+  .bookz-search {
+    margin-top: $bookz-gap;
+
+    .input-group-addon {
+      color: $brand-danger;
+      background-color: transparent;
+      border: none;
+      border-top: 1px solid $brand-danger;
+      border-bottom: 1px solid $brand-danger;
+      outline: none;
+    }
+    &:last-child {
+      border-right: 1px solid $brand-danger;
+      border-radius: inherit;
+    }
+  }
+
+  input[type=text] {
+    margin: 0 auto;
+    padding: $spacer;
+    font-size: 1.4em;
+    text-align: center;
+    border: 1px solid $brand-danger;
+    border-right: none;
+    color: $black;
+
+    @include input-placeholder {
+      color: $black;
+      font-style: italic;
+      @include opacity(0.3);
+    }
+  }
+}

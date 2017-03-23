@@ -8,5 +8,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Bootstrap" level="project" />
+    <orderEntry type="library" name="Images" level="project" />
+    <orderEntry type="library" name="Compass Mixins" level="project" />
+    <orderEntry type="library" name="FontAwesome" level="project" />
   </component>
 </module>

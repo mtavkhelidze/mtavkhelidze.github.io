@@ -14,11 +14,11 @@ const pack = require('./package.json');
 const HOST = process.env.HOST || '127.0.0.1';
 const PORT = process.env.PORT || '8080';
 
-const entryPoint = path.resolve('./src/index.jsx');
+const entryPoint = path.resolve('./src/Index.jsx');
 
 const buildPath = path.join(__dirname, 'dist');
-const template = './src/index.html';
-const appTitle = `${pack.description}  v${pack.version}`;
+const template = './src/Index.html';
+const appTitle = `${pack.description}. Version: ${pack.version}`;
 const cssFileName = 'style.css';
 
 const output = {
@@ -44,6 +44,12 @@ const uglifyOptions = {
 };
 
 const resolve = {
+    modules: [
+        'src',
+        'scss',
+        'node_modules',
+        'images'
+    ],
     extensions: ['.js', '.jsx']
 };
 
@@ -78,7 +84,11 @@ const devConfig = () => ({
     plugins: [
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.HotModuleReplacementPlugin(),
-        new HtmlWebpackPlugin(htmlWebpackPluginOptions)
+        new HtmlWebpackPlugin(htmlWebpackPluginOptions),
+        new ExtractTextPlugin({
+                                  filename: cssFileName,
+                                  allChunks: true,
+                              })
     ],
 });
 
@@ -115,6 +125,4 @@ const conf = R.ifElse(
   devConfig
 );
 
-const config = conf(process.env.NODE_ENV);
-console.log(JSON.stringify(config));
-module.exports = config;
+module.exports = conf(process.env.NODE_ENV);
