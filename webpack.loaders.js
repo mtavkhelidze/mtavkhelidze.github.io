@@ -1,7 +1,5 @@
 const R = require('ramda');
-const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
 
 const loaders = [
     {
@@ -12,16 +10,8 @@ const loaders = [
         },
     },
     {
-        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+        test: /\.woff2?(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'file-loader?mimetype=application/font-woff',
-    },
-    {
-        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'file-loader?mimetype=application/font-woff',
-    },
-    {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'file-loader?mimetype=application/octet-stream',
     },
     {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
@@ -32,15 +22,7 @@ const loaders = [
         loader: 'file-loader?mimetype=image/svg+xml',
     },
     {
-        test: /\.png(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'file-loader?mimetype=application/octet-stream',
-    },
-    {
-        test: /\.gif(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'file-loader?mimetype=application/octet-stream',
-    },
-    {
-        test: /\.jpe?g(\?v=\d+\.\d+\.\d+)?$/,
+        test: /\.(ttf|png|gif|jpe?g)(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'file-loader?mimetype=application/octet-stream',
     },
     {

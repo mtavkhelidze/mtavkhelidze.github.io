@@ -1,3 +1,5 @@
+"use strict";
+
 const path = require('path');
 const R = require('ramda');
 
@@ -23,15 +25,26 @@ const output = {
     path: buildPath,
     filename: '[name].[hash].js',
     chunkFilename: '[hash].[id].js',
-    pathinfo: true,
+    pathinfo: true
 };
 
 const mkPath = () => R.curry(path.resolve);
 
+const uglifyOptions = {
+    compress: {
+        warnings: false,
+        screw_ie8: true,
+        drop_console: true,
+        drop_debugger: true,
+        dead_code: true,
+        loops: true,
+        passes: 5
+    },
+    minimize: true
+};
+
 const resolve = {
-    modulesDirectories:
-        R.map(mkPath(__dirname), ['src', 'jbrc/src', 'node_modules', 'jbrc/node_modules']),
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['.js', '.jsx']
 };
 
 const htmlWebpackPluginOptions = {
@@ -40,19 +53,18 @@ const htmlWebpackPluginOptions = {
     xhtml: true,
     inject: 'body',
     environment: process.env.NODE_ENV,
-    version: pack.version,
+    version: pack.version
 };
 
 const devConfig = () => ({
     entry: [
         entryPoint,
     ],
-    debug: true,
     devtool: 'eval',
     output,
     resolve,
     module: {
-        loaders: loaders,
+        loaders: loaders
     },
     devServer: {
         contentBase: buildPath,
@@ -61,12 +73,12 @@ const devConfig = () => ({
         inline: true,
         historyApiFallback: true,
         port: PORT,
-        host: HOST,
+        host: HOST
     },
     plugins: [
-        new webpack.NoErrorsPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
         new webpack.HotModuleReplacementPlugin(),
-        new HtmlWebpackPlugin(htmlWebpackPluginOptions),
+        new HtmlWebpackPlugin(htmlWebpackPluginOptions)
     ],
 });
 
@@ -77,41 +89,32 @@ const prodConfig = () => ({
     output,
     resolve,
     module: {
-        loaders,
+        loaders
     },
     plugins: [
         new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify('production'),
-            },
-        }),
+                                     'process.env': {
+                                         NODE_ENV: JSON.stringify('production')
+                                     }
+                                 }),
         new WebpackCleanupPlugin(),
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.OccurenceOrderPlugin(),
         new ExtractTextPlugin(cssFileName, {
-            allChunks: true
+            allChunks: true,
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false,
-                screw_ie8: true,
-                drop_console: true,
-                drop_debugger: true,
-                dead_code: true,
-                loops: true,
-                passes: 5,
-            },
-            minimize: true,
-        }),
+        new webpack.optimize.UglifyJsPlugin(uglifyOptions),
         new HtmlWebpackPlugin(htmlWebpackPluginOptions),
         new webpack.optimize.CommonsChunkPlugin('shared.js')
     ]
 });
 
 const conf = R.ifElse(
-    env => env === 'production',
-    prodConfig,
-    devConfig
+  R.equals('production'),
+  prodConfig,
+  devConfig
 );
 
-module.exports = conf(process.env.NODE_ENV);
+const config = conf(process.env.NODE_ENV);
+console.log(JSON.stringify(config));
+module.exports = config;
